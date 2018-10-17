@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  zookeeper0:
+    image: "hyperledger/fabric-zookeeper:x86_64-0.4.7"
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=0.0.0.0:2888:3888 server.2=zookeeper1:2889:3889 server.3=zookeeper2:2890:3890
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=poc-net
+    ports:
+      - "2888:2888"
+      - "3888:3888"
+      - "2181:2181"
+    networks:
+      poc-net:
+        aliases:
+          - zookeeper0
+  zookeeper1:
+    image: "hyperledger/fabric-zookeeper:x86_64-0.4.7"
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=0.0.0.0:2889:3889 server.3=zookeeper2:2890:3890
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=poc-net
+    ports:
+      - "2889:2888"
+      - "3889:3888"
+      - "2182:2181"
+    networks:
+      poc-net:
+        aliases:
+          - zookeeper1
+  zookeeper2:
+    image: "hyperledger/fabric-zookeeper:x86_64-0.4.7"
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2889:3889 server.3=0.0.0.0:2890:3890
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=poc-net
+    ports:
+      - "2890:2888"
+      - "3890:3888"
+      - "2183:2181"
+    networks:
+      poc-net:
+        aliases:
+          - zookeeper2
+
+networks:
+  poc-net:
+    external:
+      name: poc-net
