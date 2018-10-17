@@ -1,3 +1,3 @@
 # Docker Elastic Kafka Monitoring POC
 
-![Diagram](docs/diagram.PNG)
+![Diagram](docs/diagram.png)
