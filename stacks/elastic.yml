@@ -46,6 +46,20 @@ services:
         aliases:
           - filebeat
 
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:6.4.0
+    command: metricbeat -e -strict.perms=false
+    user: root
+    volumes:
+      - ../configs/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      replicas: 1
+    networks:
+      poc-net:
+        aliases:
+          - metricbeat
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.4.0
