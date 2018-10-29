@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  elasticsearch:
+  elasticsearch-dc1:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
     environment:
       ES_JAVA_OPTS: '-Xms256m -Xmx256m'
@@ -10,33 +10,31 @@ services:
       xpack.graph.enabled: 'false'
       xpack.watcher.enabled: 'false'
     volumes:
-      - ../data/elastic/elasticsearch/data:/usr/share/elasticsearch/data
+      - ../../data/dc1/elastic/elasticsearch/data:/usr/share/elasticsearch/data
     deploy:
       replicas: 1
     networks:
       poc-net:
         aliases:
-          - elasticsearch
+          - elasticsearch-dc1
 
-  logstash:
+  logstash-dc1:
     image: docker.elastic.co/logstash/logstash:6.4.0
     volumes:
-      - ../configs/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ../../configs/dc1/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     deploy:
       replicas: 1
     networks:
       poc-net:
         aliases:
-          - logstash
+          - logstash-dc1
 
-  filebeat:
+  filebeat-dc1:
     image: docker.elastic.co/beats/filebeat:6.4.0
     command: filebeat -e -strict.perms=false
     user: root
-    ports:
-      - '5044:5044'
     volumes:
-      - ../configs/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ../../configs/dc1/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - /var/lib/docker/containers:/var/lib/docker/containers
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -44,14 +42,14 @@ services:
     networks:
       poc-net:
         aliases:
-          - filebeat
+          - filebeat-dc1
 
-  metricbeat:
+  metricbeat-dc1:
     image: docker.elastic.co/beats/metricbeat:6.4.0
     command: metricbeat -e -strict.perms=false
     user: root
     volumes:
-      - ../configs/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - ../../configs/dc1/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
       - /var/lib/docker/containers:/var/lib/docker/containers
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -59,9 +57,9 @@ services:
     networks:
       poc-net:
         aliases:
-          - metricbeat
+          - metricbeat-dc1
 
-  kibana:
+  kibana-dc1:
     image: docker.elastic.co/kibana/kibana:6.4.0
     ports:
       - '5601:5601'
@@ -74,7 +72,7 @@ services:
     networks:
       poc-net:
         aliases:
-          - kibana
+          - kibana-dc1
 
 networks:
   poc-net:

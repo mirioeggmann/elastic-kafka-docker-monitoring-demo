@@ -8,7 +8,7 @@ filebeat.prospectors:
   - add_docker_metadata: ~
 output.kafka:
   hosts: ["kafka0:9092", "kafka1:10092", "kafka2:11092","kafka3:12092"]
-  topic: 'filebeat'
+  topic: 'filebeat_dc2'
   partition.round_robin:
     reachable_only: false
   required_acks: 1
